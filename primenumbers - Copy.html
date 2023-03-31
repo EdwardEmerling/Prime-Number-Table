@@ -1,0 +1,166 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="keywords" content="prime numbers, prime, primes, prime twins">
+<title>Prime Numbers</title>
+	
+<!-- <script type="text/javascript"> -->
+<script>
+
+/* This function determines if a number is prime or not */
+function isPrime(n) {
+ if (isNaN(n) || !isFinite(n) || n%1 || n<2) return false; 
+ if (n%2==0) return (n==2);
+ if (n%3==0) return (n==3);
+ var m=Math.sqrt(n);
+ for (var i=5;i<=m;i+=6) {
+  if (n%i==0)     return false;
+  if (n%(i+2)==0) return false;
+ }
+ return true;
+}
+
+/* This function creates the table and color codes the cells of prime numbers */
+function tableCreate(X, Y){
+	
+	var numCheck = X; 								/* assigns numCheck the value the user input for how many numbers are to be checked*/
+	var numColumns = parseInt(Y);
+	var numRow = parseInt(numCheck/numColumns)+1; 	/* assigns the value that will be used as the number of rows in the table. */
+	var numCell = 1;
+    var body = document.body; 						/* assigns the value of the document body */
+    var tbl  = document.createElement('table'); 	/* creates a table dynamically to be filled */
+	var highlightColor = document.getElementById('highlightColor').value; /* assign the value of the color the user requested for highlighting primes */
+	
+	if(isNaN(numCheck)==true){
+		document.getElementById('tablearea').innerHTML='Please enter a number in arabic numerals.';
+		return; /* if the user did not enter a number to check, the function will instruct the user to do so properly. */
+	}
+	else{
+    for(var i = 0; i < numRow; i++){ /*continues the loop until the proper number of rows have been dynamically filled */
+        var tr = tbl.insertRow(-1); /* inserts a new row at the bottom */
+        for(var j = 0; j < numColumns; j++){ /*continues the loop until all data cells in the row have been filled */
+            var count = parseInt(numCell)-1;
+if(i==numRow && j==numColumns || numCheck==count){
+    break
+}  
+			else {
+				var td = tr.insertCell(-1); /* inserts a new data cell into the row */
+				if(isPrime(numCell) == true){ /* calls the function isPrime to test if the number going into the data cell is a prime */
+					if(highlightColor == ''){
+					td.style.backgroundColor='yellow'; /* uses the color yellow to highlight a cell if the user failed to specify a color */
+					}
+					else{
+					td.style.backgroundColor=highlightColor; /* uses the user's choice of color to highlight the cell if the number going in is prime */
+					}
+				}
+                td.appendChild(document.createTextNode(numCell)); /* prints the number in the data cell */
+				numCell++; /* increases the count of the number of numbers checked by 1 */
+			}
+		}
+    }
+	document.getElementById('tablearea').innerHTML=''; 				/* clears any previous tables that were written */
+    document.getElementById('tablearea').appendChild(tbl); 			/* writes the new table */
+	document.getElementById('backtotop').innerHTML="Back to top"; 	/* puts a 'back to top' link at the bottom */
+	document.getElementById('backtotop').href="#top"; 				/* links the btt link to the top */
+}
+}
+/* This function clears the tablearea when called */
+function tableClear(){
+	document.getElementById('tablearea').innerHTML='';
+	document.getElementById('backtotop').innerHTML='';
+}
+</script>
+<!-- <link rel="stylesheet" type="css" href="pntstyles.css2"> -->
+<!-- <style type="text/css"> -->
+<style>
+	body {
+		background-image:  url('PNTblackbackground.png'); 
+		background-attachment: fixed;
+		background-repeat: repeat;
+
+	}
+	aside {
+		background-image: url('PNTbackground.png');
+		margin: 5px;
+		border: 1px solid blue;
+		box-shadow: 3px 3px orange;
+		padding: 5px;
+		width: 280px;
+		float: left;
+		display: inline;
+		}
+	header {
+		background-color: blue;
+		margin: 5px;
+		border: none;
+		padding: 5px;
+		box-shadow: 3px 3px orange;
+		}
+		header h1 {
+		color: white;
+		text-align: center;
+		text-shadow: 2px 2px black;
+		}
+	table{
+		width: auto; 
+		border: none;
+		padding: 3px;
+		background-color: blue; 
+		box-shadow: 3px 3px orange;
+		margin: auto;
+	}
+	td{
+		border: 1px solid black;
+		padding: 2px;
+		box-shadow: 1px 1px orange;
+		background-color: white;
+		text-shadow: 1px 1px silver;
+	}	
+	.tablearea{
+		width: 100%;
+		text-align: center; 
+		display: inline;
+		margin: 5px auto auto auto;
+	}
+</style>
+</head>
+<body>
+<header>
+<h1>Welcome to the Prime Number Table Generator.</h1>
+</header>
+<aside>
+<form name="primes">
+		<p style="text-align: center; margin: 10px">
+		
+		How many numbers would you like to check for primes?<br>
+		<input type="text" id="numCheck" onkeypress="if (event.keyCode == 13) { 
+			var inputVal = document.primes.numCheck.value;
+			if(/^\d+$/.test(inputVal) && parseInt(inputVal) >= 1) {
+				tableCreate(inputVal);
+			} else {
+				alert('Please enter a positive integer.');
+				}
+			return false;}"> <br>
+	
+		How many columns would you like in the table?<br>
+		<input type="text" id="numColumns"><br>
+		
+		What color would you like primes highlighted?<br>
+		<input type="text" id="highlightColor"><br><br>
+		
+		<input type="button" value="Check'em!" onClick="tableCreate(document.primes.numCheck.value, document.primes.numColumns.value)">
+		<input type="reset" onClick="tableClear()"><br><br>
+		
+<script type="IN/Share" data-counter="top"></script>
+		</p>
+	</form>
+</aside>
+
+	<div id="tablearea" class="tablearea">
+	<!-- This area is filled by the function tableCreate() -->
+	</div>
+	<p style="text-align: center"><a href="" id="backtotop"></a></p>
+
+</body>
+</html>
